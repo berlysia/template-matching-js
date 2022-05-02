@@ -1,15 +1,24 @@
 {
   "name": "template-matching",
   "version": "1.0.0",
-  "main": "index.js",
   "license": "MIT",
+  "type": "commonjs",
+  "main": "./dist/cjs/index.js",
+  "types": "./dist/esm/index.d.ts",
+  "exports": {
+    "import": "./dist/esm/index.mjs",
+    "default": "./dist/cjs/index.js"
+  },
   "workspaces": [
     "packages/*"
   ],
   "packageManager": "yarn@3.2.0",
   "scripts": {
     "test": "echo 'test me please'",
-    "lint": "run-p lint:*",
+    "build": "run-p 'build:*'",
+    "build:esm": "tsc --project . --module es2015 --outDir ./dist/esm",
+    "build:cjs": "tsc --project . --module commonjs --outDir ./dist/cjs",
+    "lint": "run-p 'lint:*'",
     "lint:eslint": "eslint '**/*.{js,ts,jsx,tsx}'",
     "lint:prettier": "prettier . --check",
     "fix": "run-s fix:eslint fix:prettier",
@@ -19,9 +28,12 @@
   },
   "devDependencies": {
     "@berlysia/eslint-config": "^3.2.0",
+    "@types/jest": "^27.4.1",
     "eslint": "^8.14.0",
+    "jest": "^28.0.3",
     "lint-staged": "^12.4.1",
     "npm-run-all": "^4.1.5",
-    "prettier": "^2.6.2"
+    "prettier": "^2.6.2",
+    "typescript": "^4.6.4"
   }
 }
