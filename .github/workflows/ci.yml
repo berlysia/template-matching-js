@@ -33,12 +33,11 @@ jobs:
         env:
           CI: true
 
+      - run: yarn build
+
       - run: yarn test
         env:
           CI: true
-
-      - run: yarn build
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
 
       - name: deploy github pages
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
