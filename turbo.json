@@ -10,10 +10,6 @@
       "dependsOn": ["^build"],
       "inputs": ["src/**"]
     },
-    "lint": {
-      "outputs": [],
-      "inputs": ["src/**"]
-    },
     "dev": {
       "dependsOn": ["@berlysia/template-matching#build"],
       "cache": false
