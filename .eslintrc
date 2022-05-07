@@ -1,13 +1,9 @@
 {
-  "extends": [
-    "@berlysia/eslint-config/auto"
-  ],
+  "extends": ["@berlysia/eslint-config/auto"],
+  "root": true,
   "overrides": [
     {
-      "files": [
-        "*.config.js",
-        "*rc.js"
-      ],
+      "files": ["*.config.js", "*rc.js"],
       "rules": {
         "@typescript-eslint/no-require-imports": "off",
         "@typescript-eslint/no-var-requires": "off"

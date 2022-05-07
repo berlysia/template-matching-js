@@ -1,0 +1,22 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "baseBranch": "origin/master",
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", "build/**"]
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "inputs": ["src/**"]
+    },
+    "lint": {
+      "outputs": [],
+      "inputs": ["src/**"]
+    },
+    "dev": {
+      "dependsOn": ["@berlysia/template-matching#build"],
+      "cache": false
+    }
+  }
+}
