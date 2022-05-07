@@ -36,3 +36,13 @@ jobs:
       - run: yarn test
         env:
           CI: true
+
+      - run: yarn build
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+
+      - name: deploy github pages
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./packages/docs/dist
