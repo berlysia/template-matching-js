@@ -9,10 +9,10 @@ function max(values: number[]) {
   return result;
 }
 
-export function getCoOccurrenceMap(
+export function getCoOccurrenceMatrix(
   temp: MyImageData,
   pixelReader: PixelReaderFunction
-): ImageData {
+) {
   const coocc = Array.from({ length: 256 ** 2 }, () => 0);
 
   for (let y = 0, yL = temp.height - 1; y < yL; ++y) {
@@ -26,6 +26,14 @@ export function getCoOccurrenceMap(
       }
     }
   }
+  return coocc;
+}
+
+export function getCoOccurrenceMap(
+  temp: MyImageData,
+  pixelReader: PixelReaderFunction
+): ImageData {
+  const coocc = getCoOccurrenceMatrix(temp, pixelReader);
   const maxValue = max(coocc);
 
   const data = new Uint8ClampedArray(256 * 256 * 4);

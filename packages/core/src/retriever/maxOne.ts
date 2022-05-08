@@ -1,4 +1,4 @@
-import { peekLast } from "../scoring/peekLast";
+import { last } from "../scoring/last";
 import type { Candidate, Retriever, ScoreCalculator } from "../types";
 
 export class MaxOneRetriever implements Retriever {
@@ -6,7 +6,7 @@ export class MaxOneRetriever implements Retriever {
   #maxScore = -Infinity;
   #calcScore: ScoreCalculator;
 
-  constructor(scoreCalc: ScoreCalculator = peekLast) {
+  constructor(scoreCalc: ScoreCalculator = last) {
     this.#calcScore = scoreCalc;
   }
 

@@ -1,3 +1,5 @@
+import { clamp } from "./clamp";
+
 function sigmoid(value: number, gain = 1, offset = 0) {
   return Math.tanh((((value + offset) * gain) / 2 + 1) / 2);
 }
@@ -5,12 +7,6 @@ function sigmoid(value: number, gain = 1, offset = 0) {
 const gain = 10;
 const offset = 0.2;
 const offsetGreen = 0.6;
-
-function clamp(value: number, bottom: number, top: number) {
-  if (value < bottom) return bottom;
-  if (value > top) return top;
-  return value;
-}
 
 export function calcRangeToColor(
   value: number,
@@ -20,15 +16,15 @@ export function calcRangeToColor(
   const ratio = (value - bottom) / (top - bottom);
   const x = ratio * 2 - 1;
   return {
-    r: clamp(Math.floor(sigmoid(x, gain, -1 * offset) * 255), 0, 255),
+    r: clamp(Math.floor(sigmoid(x, gain, -1 * offset) * 255), 0, 256),
     g: clamp(
       Math.floor(
         (sigmoid(x, gain, offsetGreen) - sigmoid(x, gain, -offsetGreen)) * 255
       ),
       0,
-      255
+      256
     ),
-    b: clamp(Math.floor((1 - sigmoid(x, gain, offset)) * 255), 0, 255),
+    b: clamp(Math.floor((1 - sigmoid(x, gain, offset)) * 255), 0, 256),
   };
 }
 

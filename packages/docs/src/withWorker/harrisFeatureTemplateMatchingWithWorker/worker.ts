@@ -1,19 +1,25 @@
 import {
+  cumulativeTemplateMatching,
   narrowingDownTemplateMatching,
   pixelReaderGrayScaleBrightness,
   similarityZNCC,
-  sliceImages,
+  sliceByFeatures,
 } from "@berlysia/template-matching";
 
 onmessage = (event) => {
-  const { base, temp } = event.data;
+  const { base, temp, features } = event.data;
+  const tempImage = new ImageData(
+    new Uint8ClampedArray(temp.data),
+    temp.width,
+    temp.height
+  );
   const pos = narrowingDownTemplateMatching(
     new ImageData(new Uint8ClampedArray(base.data), base.width, base.height),
-    new ImageData(new Uint8ClampedArray(temp.data), temp.width, temp.height),
+    tempImage,
     similarityZNCC,
     pixelReaderGrayScaleBrightness,
-    0.95,
-    (t) => sliceImages(t, 24)
+    0.7,
+    (x) => sliceByFeatures(x, features)
   );
   postMessage(pos);
 };

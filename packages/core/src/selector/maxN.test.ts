@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { peekLast } from "../scoring/peekLast";
+import { last } from "../scoring/last";
 import { maxCandidateSelector } from "./maxN";
 
 const c = (x: number, y: number, scores: number[]) => ({
@@ -9,13 +9,13 @@ const c = (x: number, y: number, scores: number[]) => ({
 
 describe("maxCandidateSelector", () => {
   it("0個のとき空配列", () => {
-    expect(maxCandidateSelector([], peekLast)).toHaveLength(0);
+    expect(maxCandidateSelector([], last)).toHaveLength(0);
   });
   it("スコアが最大となるものを大きい方から指定個返す", () => {
     expect(
       maxCandidateSelector(
         [c(0, 0, [1]), c(0, 0, [2]), c(0, 0, [3]), c(0, 0, [4]), c(0, 0, [5])],
-        peekLast,
+        last,
         3
       ).map((c) => c.meta.scores)
     ).toMatchInlineSnapshot(`
@@ -34,11 +34,7 @@ describe("maxCandidateSelector", () => {
   });
   it("指定個に満たなければ全部返す", () => {
     expect(
-      maxCandidateSelector(
-        [c(0, 0, [0]), c(0, 0, [1]), c(0, 0, [2])],
-        peekLast,
-        5
-      )
+      maxCandidateSelector([c(0, 0, [0]), c(0, 0, [1]), c(0, 0, [2])], last, 5)
     ).toHaveLength(3);
   });
 });

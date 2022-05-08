@@ -1,7 +1,6 @@
-import type { DependencyList } from "react";
 import { useEffect, useState } from "react";
 
-type AsyncState<T> =
+export type AsyncState<T> =
   | {
       ok: false;
       err: false;

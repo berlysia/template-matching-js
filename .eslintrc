@@ -1,6 +1,10 @@
 {
   "extends": ["@berlysia/eslint-config/auto"],
   "root": true,
+  "rules": {
+    "max-depth": "off",
+    "complexity": "off"
+  },
   "overrides": [
     {
       "files": ["*.config.js", "*rc.js"],

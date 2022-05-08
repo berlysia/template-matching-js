@@ -7,8 +7,8 @@ export function* partialTemplateIterator(
 ): Iterable<Candidate> {
   yield* naiveIterator(
     partialTemp.offsetX,
-    base.width - partialTemp.originW + partialTemp.offsetX,
+    base.width + -partialTemp.originW,
     partialTemp.offsetY,
-    base.height - partialTemp.originH + partialTemp.offsetY
+    base.height + -partialTemp.originH
   );
 }

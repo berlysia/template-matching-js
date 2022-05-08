@@ -3,70 +3,60 @@ import type {
   MyImageData,
   PixelReaderFunction,
   Position,
-  Retriever,
   SimilarityFunction,
   PartialImageData,
-  Candidate,
 } from "../types";
 import { sliceImages } from "../slicer/index";
 import { offsetIterator } from "../iterator/offset";
 import { OffsetRetriever } from "../retriever/offset";
-import { MaxOneRetriever } from "../retriever/maxOne";
 import { partialTemplateIterator } from "../iterator/partialTemplate";
 import { average } from "../scoring/average";
 import { maxOneCandidateSelector } from "../selector/maxOne";
-import { peekMax } from "../scoring/peekMax";
+import { sum } from "../scoring/sum";
 import { basicTemplateMatching } from "./basic";
-import { partialTemplateMatching } from "./partialTemplate";
 
 type SlicingFunction = (imageData: MyImageData) => PartialImageData[];
 
-export function slicedTemplateMatching(
+export function cumulativeTemplateMatching(
   base: MyImageData,
   temp: MyImageData,
   similarity: SimilarityFunction,
   pixelReader: PixelReaderFunction,
   threshold = 0.6,
   slicingFunction: SlicingFunction = (temp) => sliceImages(temp, 24)
-): Position {
+) {
   const slicedTemp = slicingFunction(temp);
-
-  if (slicedTemp.length === 1) {
-    return partialTemplateMatching(
-      base,
-      slicedTemp[0]!.data,
-      slicedTemp[0]!,
-      similarity,
-      pixelReader,
-      () => new MaxOneRetriever()
-    ).first().pos;
-  }
-
-  let candidates: Candidate[] = [];
+  const map = new Map<`${number}:${number}`, number[]>();
 
   for (const sliced of slicedTemp) {
-    const offset = { x: sliced.offsetX, y: sliced.offsetY };
-    const nextCandidates = basicTemplateMatching(
+    const offset = {
+      x: sliced.offsetX,
+      y: sliced.offsetY,
+    };
+    const results = basicTemplateMatching(
       base,
       sliced.data,
       similarity,
       pixelReader,
-      // eslint-disable-next-line @typescript-eslint/no-loop-func, no-loop-func -- candidatesがどうしようもない
-      () =>
-        offsetIterator(
-          offset,
-          sliced === slicedTemp[0]
-            ? partialTemplateIterator(base, sliced)
-            : candidates
-        ),
+
+      () => offsetIterator(offset, partialTemplateIterator(base, sliced)),
       () =>
         new OffsetRetriever(offset, new ThresholdRetriever(average, threshold))
     ).all();
-    candidates = nextCandidates;
-    if (candidates.length === 1 && candidates[0]) {
-      return candidates[0].pos;
+    for (const cand of results) {
+      const key = `${cand.pos.x}:${cand.pos.y}` as const;
+      const arr = (map.get(key) ?? []).concat(cand.meta.scores!);
+      map.set(key, arr);
     }
   }
 
-  return maxOneCandidateSelector(candidates, peekMax).pos;
+  const candidates = [...map.entries()].map(([key, scores]) => {
+    const [x, y] = key.split(":").map((v) => parseInt(v, 10)) as [
+      number,
+      number
+    ];
+    return { pos: { x, y }, meta: { scores } };
+  });
+
+  return candidates;
 }

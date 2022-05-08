@@ -39,5 +39,9 @@ export const zncc: SimilarityFunction = (
   const baseVariance = basePow2Average - baseAverage ** 2;
   const tempVariance = tempPow2Average - tempAverage ** 2;
 
-  return covariance / (Math.sqrt(baseVariance) * Math.sqrt(tempVariance));
+  const denominator = Math.sqrt(baseVariance) * Math.sqrt(tempVariance);
+
+  if (denominator === 0) return 1;
+  const result = covariance / denominator;
+  return result;
 };

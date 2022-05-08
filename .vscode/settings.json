@@ -1,0 +1,7 @@
+{
+  "search.exclude": {
+    ".yarn/plugins": true,
+    ".yarn/releases": true
+  },
+  "eslint.packageManager": "yarn"
+}

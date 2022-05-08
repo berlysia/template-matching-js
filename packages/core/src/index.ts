@@ -3,3 +3,8 @@ export * from "./pixelReader/index";
 export * from "./matcher/index";
 export * from "./utils/index";
 export * from "./slicer/index";
+export * from "./feature/index";
+export * from "./filter/index";
+export * from "./selector/index";
+export * from "./scoring/index";
+export * from "./types";

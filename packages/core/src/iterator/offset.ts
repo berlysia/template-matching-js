@@ -5,11 +5,13 @@ export function* offsetIterator(
   values: Iterable<Candidate>
 ): Iterable<Candidate> {
   for (const v of values) {
+    const x = v.pos.x + offset.x;
+    const y = v.pos.y + offset.y;
     yield {
       ...v,
       pos: {
-        x: v.pos.x + offset.x,
-        y: v.pos.y + offset.y,
+        x,
+        y,
       },
     };
   }

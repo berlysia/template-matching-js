@@ -1,12 +1,9 @@
-import { naiveIterator } from "../iterator/naive";
 import { partialTemplateIterator } from "../iterator/partialTemplate";
 import { MaxOneRetriever } from "../retriever/maxOne";
 import type {
-  Logger,
   MyImageData,
   PixelReaderFunction,
   Position,
-  Retriever,
   RetrieverFactory,
   SimilarityFunction,
 } from "../types";
